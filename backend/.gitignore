@@ -1,0 +1,12 @@
+# Environment variables
+.env
+credentials.json
+token.json
+
+# Python artifacts
+__pycache__/
+.venv/
+
+# Editor directories
+.vscode/
+

@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+httpx
+pytest
+langchain
+langchain-community
+langgraph
+
+# Gmail API
+google-api-python-client
+google-auth
+google-auth-oauthlib
+
+

@@ -1,0 +1,20 @@
+# Root gitignore
+# Ignore environment files
+.env
+backend/.env
+backend/credentials.json
+backend/token.json
+
+# Node and Python artifacts
+node_modules/
+frontend/node_modules/
+backend/.venv/
+
+# Build outputs
+dist/
+build/
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
