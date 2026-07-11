@@ -1,6 +1,5 @@
 # main.py
 
-
 from fastapi import FastAPI
 from .api.router import api_router
 

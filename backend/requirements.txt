@@ -7,6 +7,7 @@ pytest
 langchain
 langchain-community
 langgraph
+langchain-groq
 
 # Gmail API
 google-api-python-client
