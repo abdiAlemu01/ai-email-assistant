@@ -3,13 +3,16 @@ from dotenv import load_dotenv
 import os
 load_dotenv() 
 
-from langchain_groq import ChatGroq
+from langchain_huggingface import ChatHuggingFace
+from langchain_community.llms import HuggingFaceEndpoint
 
-model = ChatGroq(
-    api_key=os.getenv("GROQ_API_KEY"),
-    model="llama-3.3-70b-versatile",
+llm = HuggingFaceEndpoint(
+    repo_id="meta-llama/Llama-3.3-70B-Instruct",
+    huggingfacehub_api_token=os.getenv("HUGGINGFACE_API_KEY"),
     temperature=0
 )
+
+model = ChatHuggingFace(llm=llm)
 
 
 from langchain.tools import tool

@@ -5,14 +5,10 @@ python-dotenv
 httpx
 pytest
 langchain
-langchain-community
-langgraph
-langchain-huggingface
-huggingface-hub
-
-# Gmail API
 google-api-python-client
 google-auth
 google-auth-oauthlib
-
-
+langchain-community>=0.4.2
+langgraph>=1.2.8
+langchain-huggingface>=1.2.2
+huggingface-hub>=1.23.0
