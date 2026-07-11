@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv() 
 
-from langchain_huggingface import ChatHuggingFace
-from langchain_community.llms import HuggingFaceEndpoint
+from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 
 llm = HuggingFaceEndpoint(
     repo_id="meta-llama/Llama-3.3-70B-Instruct",
