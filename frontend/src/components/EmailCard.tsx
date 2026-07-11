@@ -1,3 +1,4 @@
+// components/EmailCard.tsx
 import { Email } from '../types/email';
 import { formatSender, truncateText } from '../shared/utils/format';
 import { Mail, User } from 'lucide-react';

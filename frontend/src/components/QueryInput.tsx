@@ -1,3 +1,4 @@
+// components/QueryInput.tsx
 import { useState } from 'react';
 import { Send, Loader2 } from 'lucide-react';
 
@@ -24,7 +25,7 @@ export const QueryInput = ({ onQuery, loading }: QueryInputProps) => {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ask about your emails... (e.g., 'Show me urgent emails')"
+          placeholder="Ask about your emails..."
           className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
           disabled={loading}
         />

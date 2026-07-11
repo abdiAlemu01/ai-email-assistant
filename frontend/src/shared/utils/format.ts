@@ -1,3 +1,4 @@
+// shared/utils/format.ts
 export const formatSender = (sender: string): string => {
   // Extract name from email if available
   const match = sender.match(/^(.*?)\s*</);

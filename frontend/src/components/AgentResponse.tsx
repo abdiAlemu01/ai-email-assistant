@@ -1,3 +1,4 @@
+// components/AgentResponse.tsx
 import { Bot } from 'lucide-react';
 
 interface AgentResponseProps {
