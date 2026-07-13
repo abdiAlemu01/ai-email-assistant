@@ -40,7 +40,7 @@ export const EmailPage = () => {
             <h1 className="text-3xl font-bold text-gray-900">AI Email Assistant</h1>
             <Sparkles className="w-8 h-8 text-blue-600" />
           </div>
-          <p className="text-gray-600">Ask questions about your emails using natural language</p>
+          <p className="text-green-600">Ask questions about your emails using natural language</p>
         </div>
 
         {/* Query Input */}

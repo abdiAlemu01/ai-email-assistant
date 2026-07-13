@@ -3,11 +3,18 @@ from dotenv import load_dotenv
 import os
 load_dotenv() 
 
+api_key = os.getenv("HUGGINGFACE_API_KEY")
+if not api_key:
+    raise ValueError(
+        "HUGGINGFACE_API_KEY not found in environment variables. "
+        "Please set it in your .env file or export it as an environment variable."
+    )
+
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 
 llm = HuggingFaceEndpoint(
     repo_id="meta-llama/Llama-3.3-70B-Instruct",
-    huggingfacehub_api_token=os.getenv("HUGGINGFACE_API_KEY"),
+    huggingfacehub_api_token=api_key,
     temperature=0
 )
 
@@ -32,5 +39,7 @@ def create_email_agent(model):
     )
 
     return agent
+
+
 
 

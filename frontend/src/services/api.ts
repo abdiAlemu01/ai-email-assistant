@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { EmailResponse, AgentRequest, AgentResponse } from '../types/api';
+import { EmailResponse, AgentResponse } from '../types/api';
 
 const API_BASE_URL = '/api';
 
