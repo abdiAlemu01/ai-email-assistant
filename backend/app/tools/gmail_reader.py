@@ -32,33 +32,15 @@ def extract_attachments(payload):
     if "parts" in payload:
         for part in payload["parts"]:
             if part.get("filename"):
-                attachments.append(part.get("filename"))
+                attachments.append({
+                    "filename": part.get("filename"),
+                    "mimeType": part.get("mimeType", "application/octet-stream"),
+                    "size": part.get("body", {}).get("size")
+                })
             if "parts" in part:
                 attachments.extend(extract_attachments(part))
     
     return attachments
-
-
-def format_email(email_data):
-    """Format email data into the desired structure."""
-    formatted = f"""Subject:
-{email_data.get('subject', 'No Subject')}
-
-From:
-{email_data.get('from', 'Unknown')}
-
-To:
-{email_data.get('to', 'Unknown')}
-
-Date:
-{email_data.get('date', 'Unknown')}
-
-Body:
-{email_data.get('body', 'No body content')}
-
-Attachments:
-{', '.join(email_data.get('attachments', [])) if email_data.get('attachments') else 'None'}"""
-    return formatted
 
 
 def read_latest_emails(limit: int = 5):
@@ -70,7 +52,7 @@ def read_latest_emails(limit: int = 5):
     - Show recent emails
     - What emails did I receive?
 
-    Returns email data in structured format with subject, from, to, date, body, and attachments.
+    Returns email data in structured format matching the frontend Email interface.
     """
 
     service = gmail_reader_service.get_gmail_service()
@@ -94,12 +76,18 @@ def read_latest_emails(limit: int = 5):
         headers = payload.get("headers", [])
 
         email_data = {
+            "id": message["id"],
+            "threadId": email.get("threadId", ""),
             "subject": "",
             "from": "",
             "to": "",
             "date": "",
+            "snippet": email.get("snippet", ""),
             "body": "",
-            "attachments": []
+            "attachments": [],
+            "labels": email.get("labelIds", []),
+            "isRead": "UNREAD" not in email.get("labelIds", []),
+            "isStarred": "STARRED" in email.get("labelIds", [])
         }
 
         for header in headers:
@@ -118,9 +106,7 @@ def read_latest_emails(limit: int = 5):
         # Extract attachments
         email_data["attachments"] = extract_attachments(payload)
 
-        # Format the email
-        formatted_email = format_email(email_data)
-        emails.append(formatted_email)
+        emails.append(email_data)
 
     return emails
 

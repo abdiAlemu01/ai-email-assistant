@@ -25,6 +25,7 @@ from langchain.tools import tool
 from langgraph.prebuilt import create_react_agent
 
 from ..tools.gmail_reader import read_latest_emails_tool
+from ..tools.gmail_search import search_emails
 
 
 def create_email_agent(model):

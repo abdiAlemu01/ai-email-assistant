@@ -19,7 +19,7 @@ export const EmailCard = ({ email }: EmailCardProps) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
             <h3 className="font-semibold text-gray-900 truncate">
-              {formatSender(email.sender)}
+              {formatSender(email.from)}
             </h3>
             <Mail className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
           </div>

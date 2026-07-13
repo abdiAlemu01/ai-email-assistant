@@ -1,9 +1,16 @@
-// 
 // types/email.ts
+
 export interface Email {
-  sender: string;
+  id?: string;
   subject: string;
-  snippet: string;
+  from: string;
+  to: string;
+  date: string;
+  body: string;
+  attachments: string[];
+  snippet?: string;
+  priority?: 'high' | 'medium' | 'low';
+  unread?: boolean;
 }
 
 export interface EmailResponse {
@@ -16,6 +23,16 @@ export interface AgentRequest {
 }
 
 export interface AgentResponse {
-  messages: any[];
+  success: boolean;
   response?: string;
+  error?: string;
+  data?:unknown;
+}
+
+export interface EmailFilter {
+  unread?: boolean;
+  priority?: 'high' | 'medium' | 'low';
+  sender?: string;
+  dateFrom?: string;
+  dateTo?: string;
 }
