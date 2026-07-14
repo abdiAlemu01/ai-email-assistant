@@ -25,13 +25,16 @@ from langgraph.prebuilt import create_react_agent
 
 from ..tools.gmail_reader import read_latest_emails_tool
 from ..tools.gmail_search import search_emails_tool
+from ..tools.gmail_summarize import summarize_email_tool
+from ..tools.gmail_draft_replies import draft_replies_email_tool
 
 
 def create_email_agent(model):
 
     tools = [
         read_latest_emails_tool,
-        search_emails_tool
+        search_emails_tool,
+        summarize_email_tool
     ]
 
     agent = create_react_agent(
