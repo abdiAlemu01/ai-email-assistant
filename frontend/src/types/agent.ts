@@ -4,9 +4,11 @@ export interface AgentRequest {
   query: string;
 }
 
+export interface AgentMessage {
+  type: string;
+  content: string;
+}
+
 export interface AgentResponse {
-  success: boolean;
-  response?: string;
-  error?: string;
-  data?: unknown;
+  messages: AgentMessage[];
 }

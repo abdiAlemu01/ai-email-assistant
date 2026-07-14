@@ -3,29 +3,53 @@ import { useState } from 'react';
 import { useEmails, useAgentQuery } from '../hooks/useEmailQuery';
 import { EmailList } from '../components/EmailList';
 import { QueryInput } from '../components/QueryInput';
-import { AgentResponse } from '../components/AgentResponse';
+import { AgentResponse as AgentResponseComponent } from '../components/AgentResponse';
+import { ErrorAlert } from '../components/ErrorAlert';
 import { Mail, Sparkles } from 'lucide-react';
+import { parseError, ApiError } from '../services/api';
+import { AgentResponse } from '../types/agent';
 
 export const EmailPage = () => {
   const [agentResponse, setAgentResponse] = useState<string>('');
-  const { data: emailsData, isLoading: emailsLoading } = useEmails(5);
+  const [agentError, setAgentError] = useState<ApiError | null>(null);
+  const [emailError, setEmailError] = useState<ApiError | null>(null);
+  
+  const { data: emailsData, isLoading: emailsLoading, error: emailsQueryError } = useEmails(5);
   const agentQuery = useAgentQuery();
 
+  // Parse email loading error
+  if (emailsQueryError && !emailError) {
+    setEmailError(parseError(emailsQueryError));
+  }
+
   const handleQuery = (query: string) => {
+    // Clear previous errors
+    setAgentError(null);
+    setAgentResponse('');
+
     agentQuery.mutate(query, {
-      onSuccess: (data) => {
+      onSuccess: (data: AgentResponse) => {
         // Extract the last AI message from the response
         const messages = data.messages || [];
         const lastAiMessage = messages
-          .filter((msg: any) => msg.type === 'ai')
+          .filter((msg) => msg.type === 'ai')
           .pop();
         
         if (lastAiMessage) {
           setAgentResponse(lastAiMessage.content);
+        } else {
+          setAgentError({
+            message: 'No Response',
+            detail: 'The AI agent did not return any response.',
+            status: 200,
+            source: 'agent'
+          });
         }
       },
-      onError: () => {
-        setAgentResponse('Sorry, I encountered an error processing your request.');
+      onError: (error) => {
+        const parsedError = parseError(error);
+        setAgentError(parsedError);
+        setAgentResponse('');
       }
     });
   };
@@ -51,10 +75,20 @@ export const EmailPage = () => {
           />
         </div>
 
+        {/* Agent Error */}
+        {agentError && (
+          <div className="max-w-3xl mx-auto mb-8">
+            <ErrorAlert 
+              error={agentError} 
+              onDismiss={() => setAgentError(null)} 
+            />
+          </div>
+        )}
+
         {/* Agent Response */}
         {agentResponse && (
           <div className="max-w-3xl mx-auto mb-8">
-            <AgentResponse response={agentResponse} />
+            <AgentResponseComponent response={agentResponse} />
           </div>
         )}
 
@@ -66,6 +100,15 @@ export const EmailPage = () => {
               {emailsData?.count || 0} emails
             </span>
           </div>
+
+          {/* Email Loading Error */}
+          {emailError && (
+            <ErrorAlert 
+              error={emailError} 
+              onDismiss={() => setEmailError(null)} 
+            />
+          )}
+
           <EmailList 
             emails={emailsData?.emails || []} 
             loading={emailsLoading} 

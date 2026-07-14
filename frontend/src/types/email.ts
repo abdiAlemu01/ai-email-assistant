@@ -18,17 +18,6 @@ export interface EmailResponse {
   emails: Email[];
 }
 
-export interface AgentRequest {
-  query: string;
-}
-
-export interface AgentResponse {
-  success: boolean;
-  response?: string;
-  error?: string;
-  data?:unknown;
-}
-
 export interface EmailFilter {
   unread?: boolean;
   priority?: 'high' | 'medium' | 'low';
