@@ -3,22 +3,21 @@ from dotenv import load_dotenv
 import os
 load_dotenv() 
 
-api_key = os.getenv("HUGGINGFACE_API_KEY")
+api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
     raise ValueError(
-        "HUGGINGFACE_API_KEY not found in environment variables. "
+        "GROQ_API_KEY not found in environment variables. "
         "Please set it in your .env file or export it as an environment variable."
     )
 
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from langchain_groq import ChatGroq
 
-llm = HuggingFaceEndpoint(
-    repo_id="meta-llama/Llama-3.3-70B-Instruct",
-    huggingfacehub_api_token=api_key,
+# Initialize Groq model
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",  # Fast and powerful
+    api_key=api_key,
     temperature=0
 )
-
-model = ChatHuggingFace(llm=llm)
 
 
 from langchain.tools import tool

@@ -32,7 +32,7 @@ export const parseError = (error: unknown): ApiError => {
     
     if (status === 503 || detail.includes('Gmail') || detail.includes('connection')) {
       source = 'gmail';
-    } else if (detail.includes('agent') || detail.includes('HuggingFace') || detail.includes('api_key')) {
+    } else if (detail.includes('agent') || detail.includes('Groq') || detail.includes('api_key')) {
       source = 'agent';
     }
 

@@ -59,10 +59,10 @@ async def run_agent(request: AgentRequest):
         logger.error(f"Configuration error: {error_msg}")
         
         # Provide specific error messages for common issues
-        if "api_key" in error_msg.lower() or "huggingface" in error_msg.lower():
+        if "api_key" in error_msg.lower() or "groq" in error_msg.lower():
             raise HTTPException(
                 status_code=500, 
-                detail="AI agent configuration error: HuggingFace API key is missing or invalid. Please check your .env file."
+                detail="AI agent configuration error: Groq API key is missing or invalid. Please check your .env file."
             )
         raise HTTPException(status_code=500, detail=f"Agent configuration error: {error_msg}")
         
