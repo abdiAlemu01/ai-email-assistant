@@ -2,7 +2,7 @@ import { Email } from '../types/email';
 import { EmailCard } from './EmailCard';
 
 interface EmailListProps {
-  emails: Email[];
+  emails: Email[] | undefined;
   loading?: boolean;
 }
 
@@ -21,6 +21,16 @@ export const EmailList = ({ emails, loading }: EmailListProps) => {
     );
   }
 
+  // Defensive check - ensure emails is an array
+  if (!emails || !Array.isArray(emails)) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500">Unable to load emails</p>
+        <p className="text-sm text-gray-400 mt-2">Invalid data format received</p>
+      </div>
+    );
+  }
+
   if (emails.length === 0) {
     return (
       <div className="text-center py-12">
@@ -32,7 +42,7 @@ export const EmailList = ({ emails, loading }: EmailListProps) => {
   return (
     <div className="space-y-4">
       {emails.map((email, index) => (
-        <EmailCard key={index} email={email} />
+        <EmailCard key={email.id || index} email={email} />
       ))}
     </div>
   );

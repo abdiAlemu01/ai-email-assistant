@@ -15,8 +15,15 @@ async def list_emails(limit: int = 5):
     """Return latest emails using the gmail reader tool."""
     try:
         logger.info(f"Fetching {limit} emails...")
-        emails = read_latest_emails(limit)
-        return {"count": len(emails), "emails": emails}
+        result = read_latest_emails(limit)
+        
+        # Handle both old format (array) and new format (dict with emails key)
+        if isinstance(result, dict) and "emails" in result:
+            return {"count": result.get("count", len(result["emails"])), "emails": result["emails"]}
+        else:
+            # Old format - just an array
+            return {"count": len(result), "emails": result}
+            
     except ConnectionError as e:
         logger.error(f"Gmail connection error: {str(e)}")
         raise HTTPException(

@@ -90,10 +90,16 @@ def get_gmail_service():
 
 
 
-def search_emails(query: str, limit: int = 10):
-    """Search emails from Gmail inbox and return structured data matching the reader service format."""
+def search_emails(query: str, limit: int = 5):
+    """
+    Search emails from Gmail inbox and return CONCISE structured data.
+    Optimized to reduce token usage by excluding full email bodies.
+    """
     
     service = get_gmail_service()
+
+    # Cap at 5 emails to avoid token limits
+    limit = min(limit, 5)
 
     response = service.users().messages().list(
         userId="me",
@@ -116,17 +122,14 @@ def search_emails(query: str, limit: int = 10):
 
         email_data = {
             "id": message["id"],
-            "threadId": email.get("threadId", ""),
             "subject": "",
             "from": "",
-            "to": "",
             "date": "",
-            "snippet": email.get("snippet", ""),
-            "body": "",
-            "attachments": [],
-            "labels": email.get("labelIds", []),
-            "isRead": "UNREAD" not in email.get("labelIds", []),
-            "isStarred": "STARRED" in email.get("labelIds", [])
+            "snippet": email.get("snippet", "")[:150],  # Truncate to 150 chars
+            "has_attachments": False,
+            "attachment_count": 0,
+            "is_read": "UNREAD" not in email.get("labelIds", []),
+            "is_starred": "STARRED" in email.get("labelIds", [])
         }
 
         for header in headers:
@@ -134,16 +137,15 @@ def search_emails(query: str, limit: int = 10):
                 email_data["subject"] = header["value"]
             elif header["name"] == "From":
                 email_data["from"] = header["value"]
-            elif header["name"] == "To":
-                email_data["to"] = header["value"]
             elif header["name"] == "Date":
                 email_data["date"] = header["value"]
 
-        # Extract body
-        email_data["body"] = extract_email_body(payload)
-        
-        # Extract attachments
-        email_data["attachments"] = extract_attachments(payload)
+        # Get attachment info (names only, not full data)
+        attachments = extract_attachments(payload)
+        email_data["has_attachments"] = len(attachments) > 0
+        email_data["attachment_count"] = len(attachments)
+        if attachments:
+            email_data["attachment_names"] = [att["filename"] for att in attachments[:3]]  # Max 3 names
 
         emails.append(email_data)
 

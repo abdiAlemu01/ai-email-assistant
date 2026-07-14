@@ -46,16 +46,21 @@ def extract_attachments(payload):
 def read_latest_emails(limit: int = 5):
     """
     Retrieve recent emails from the user's Gmail inbox.
+    Returns CONCISE summaries to avoid token limits.
 
     Use this tool when the user asks:
     - Read my latest emails
     - Show recent emails
     - What emails did I receive?
 
-    Returns email data in structured format matching the frontend Email interface.
+    Returns email data with truncated bodies and key information only.
+    Max limit: 5 emails to conserve tokens.
     """
 
     service = gmail_reader_service.get_gmail_service()
+
+    # Cap limit at 5 to avoid token overflow
+    limit = min(limit, 5)
 
     result = service.users().messages().list(
         userId="me",
@@ -77,17 +82,14 @@ def read_latest_emails(limit: int = 5):
 
         email_data = {
             "id": message["id"],
-            "threadId": email.get("threadId", ""),
             "subject": "",
             "from": "",
-            "to": "",
             "date": "",
-            "snippet": email.get("snippet", ""),
-            "body": "",
-            "attachments": [],
-            "labels": email.get("labelIds", []),
-            "isRead": "UNREAD" not in email.get("labelIds", []),
-            "isStarred": "STARRED" in email.get("labelIds", [])
+            "snippet": email.get("snippet", "")[:150],  # Truncate snippet to 150 chars
+            "has_attachments": False,
+            "attachment_count": 0,
+            "is_read": "UNREAD" not in email.get("labelIds", []),
+            "is_starred": "STARRED" in email.get("labelIds", [])
         }
 
         for header in headers:
@@ -95,20 +97,23 @@ def read_latest_emails(limit: int = 5):
                 email_data["subject"] = header["value"]
             elif header["name"] == "From":
                 email_data["from"] = header["value"]
-            elif header["name"] == "To":
-                email_data["to"] = header["value"]
             elif header["name"] == "Date":
                 email_data["date"] = header["value"]
 
-        # Extract body
-        email_data["body"] = extract_email_body(payload)
-        
-        # Extract attachments
-        email_data["attachments"] = extract_attachments(payload)
+        # Get attachment info (count only, not full data)
+        attachments = extract_attachments(payload)
+        email_data["has_attachments"] = len(attachments) > 0
+        email_data["attachment_count"] = len(attachments)
+        if attachments:
+            email_data["attachment_names"] = [att["filename"] for att in attachments[:3]]  # Max 3 names
 
         emails.append(email_data)
 
-    return emails
+    return {
+        "count": len(emails),
+        "emails": emails,
+        "note": "Email bodies omitted to conserve tokens. Snippets provided instead."
+    }
 
 
 read_latest_emails_tool = tool(read_latest_emails)
