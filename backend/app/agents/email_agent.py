@@ -27,6 +27,7 @@ from ..tools.gmail_reader import read_latest_emails_tool
 from ..tools.gmail_search import search_emails_tool
 from ..tools.gmail_summarize import summarize_email_tool
 from ..tools.gmail_draft_replies import draft_replies_email_tool
+from ..tools.gmail_send import send_email_tool, send_draft_tool
 
 
 def create_email_agent(model):
@@ -34,7 +35,10 @@ def create_email_agent(model):
     tools = [
         read_latest_emails_tool,
         search_emails_tool,
-        summarize_email_tool
+        summarize_email_tool,
+        draft_replies_email_tool,
+        send_email_tool,
+        send_draft_tool
     ]
 
     agent = create_react_agent(

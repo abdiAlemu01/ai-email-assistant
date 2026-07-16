@@ -43,7 +43,7 @@ def extract_attachments(payload):
     return attachments
 
 
-def read_latest_emails(limit: int = 5):
+def read_latest_emails(limit: int = 1):
     """
     Retrieve recent emails from the user's Gmail inbox.
     Returns CONCISE summaries to avoid token limits.
@@ -54,7 +54,7 @@ def read_latest_emails(limit: int = 5):
     - What emails did I receive?
 
     Returns email data with truncated bodies and key information only.
-    Max limit: 5 emails to conserve tokens.
+    Max limit: 1 emails to conserve tokens.
     """
 
     service = gmail_reader_service.get_gmail_service()

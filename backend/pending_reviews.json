@@ -1,0 +1,151 @@
+{
+  "f2c511a0-c11f-4663-ae44-a19f966e61fc": {
+    "review_id": "f2c511a0-c11f-4663-ae44-a19f966e61fc",
+    "status": "rejected",
+    "created_at": "2026-07-15T17:33:51.552906",
+    "email_data": {
+      "to": "test@example.com",
+      "subject": "Test Email",
+      "body": "This is a test email from the AI assistant.",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": null,
+    "rejected_at": "2026-07-15T17:34:39.376837",
+    "rejection_reason": "i don't want"
+  },
+  "6553ea3d-44e9-44e7-9ab0-316268dc580c": {
+    "review_id": "6553ea3d-44e9-44e7-9ab0-316268dc580c",
+    "status": "sent",
+    "created_at": "2026-07-15T17:36:25.957062",
+    "email_data": {
+      "to": "hopealemu9@gmail.com",
+      "subject": "Test Email",
+      "body": "This is a test email from the AI assistant.",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": "2026-07-15T17:36:41.560436",
+    "rejected_at": null,
+    "rejection_reason": null,
+    "sent_at": "2026-07-15T17:36:44.959229",
+    "message_id": "19f66356bb7942b8"
+  },
+  "893aa078-8535-4a03-895b-0b67772dbad3": {
+    "review_id": "893aa078-8535-4a03-895b-0b67772dbad3",
+    "status": "pending",
+    "created_at": "2026-07-15T17:36:26.743555",
+    "email_data": {
+      "to": "hopealemu9@gmail.com",
+      "subject": "Test Email",
+      "body": "This is a test email from the AI assistant.",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": null,
+    "rejected_at": null,
+    "rejection_reason": null
+  },
+  "4d856928-01f7-4a18-b376-e0b450f94add": {
+    "review_id": "4d856928-01f7-4a18-b376-e0b450f94add",
+    "status": "pending",
+    "created_at": "2026-07-15T17:36:27.765208",
+    "email_data": {
+      "to": "hopealemu9@gmail.com",
+      "subject": "Test Email",
+      "body": "This is a test email from the AI assistant.",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": null,
+    "rejected_at": null,
+    "rejection_reason": null
+  },
+  "cfba9c95-81fc-46d5-8e2a-ed6ac37e2fdb": {
+    "review_id": "cfba9c95-81fc-46d5-8e2a-ed6ac37e2fdb",
+    "status": "pending",
+    "created_at": "2026-07-15T23:48:05.071843",
+    "email_data": {
+      "to": "hopealemu9@gmail.com",
+      "subject": "AI Email Assistant Program Starting Tomorrow",
+      "body": "This is to inform you that the AI Email Assistant program will be starting tomorrow morning.",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": null,
+    "rejected_at": null,
+    "rejection_reason": null
+  },
+  "b5e760b7-eeaf-4c48-af47-14948d2fb2e2": {
+    "review_id": "b5e760b7-eeaf-4c48-af47-14948d2fb2e2",
+    "status": "pending",
+    "created_at": "2026-07-15T23:51:10.170144",
+    "email_data": {
+      "to": "john@example.com",
+      "subject": "Test Email",
+      "body": "This is a test email",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": null,
+    "rejected_at": null,
+    "rejection_reason": null
+  },
+  "20d9afcb-29bc-4bea-b35b-ab2e4847aecf": {
+    "review_id": "20d9afcb-29bc-4bea-b35b-ab2e4847aecf",
+    "status": "pending",
+    "created_at": "2026-07-16T09:42:03.520505",
+    "email_data": {
+      "to": "alibaba@example.com",
+      "subject": "Meeting Invitation",
+      "body": "Hello, I would like to invite you to a meeting to discuss potential business opportunities.",
+      "draft_id": null,
+      "thread_id": null,
+      "in_reply_to": null,
+      "references": null
+    },
+    "metadata": {
+      "tool": "send_email",
+      "source": "ai_agent"
+    },
+    "approved_at": null,
+    "rejected_at": null,
+    "rejection_reason": null
+  }
+}
