@@ -1,5 +1,6 @@
-"""Gmail Search Tool"""
+"""    Gmail Search Tool    """
 
+from typing import Union
 from langchain.tools import tool
 
 from ..services import gmail_search_service
@@ -32,36 +33,91 @@ def format_email_summary(email):
 
 
 @tool
-def search_emails(query: str, limit: int = 5):
+def search_emails(query: str, limit: Union[str, int] = 5):
     """
-    Search emails from Gmail inbox using Gmail search syntax.
-    Returns a CONCISE summary of each email to avoid token limits.
+    Search the user's Gmail inbox using Gmail search syntax and return concise email summaries.
 
-    Use this tool when the user asks to:
-    - Search for specific emails
-    - Find emails with specific criteria
-    - Look for emails from a sender
-    - Find emails with a specific subject
-    - Search for emails with attachments
+    Use this tool whenever the user wants to search, find, filter, or locate emails that match
+    specific criteria instead of simply reading the latest emails.
+
+    Use this tool for requests such as:
+    - Search my emails
+    - Find emails
+    - Look for emails
+    - Search for invoices
+    - Find emails from Amazon
+    - Show emails from LinkedIn
+    - Find emails from GitHub
+    - Search emails from Udemy
+    - Find emails from a specific sender
+    - Search by subject
+    - Search by keyword
+    - Find emails with attachments
+    - Show unread emails
+    - Find starred emails
+    - Search emails from today
+    - Search emails from yesterday
+    - Find emails from this week
+    - Search emails after a specific date
+    - Search emails before a specific date
+
+    Examples of user requests:
+    - "Find invoices"
+    - "Search emails about AI"
+    - "Show emails from Amazon"
+    - "Find LinkedIn emails from today"
+    - "Search unread emails"
+    - "Find emails with attachments"
+    - "Search emails after July 1st"
+    - "Show emails before January 2026"
+
+    Convert the user's request into the appropriate Gmail search query.
 
     Examples:
-    - "search for invoices"
-    - "find emails from amazon"
-    - "search for emails about meeting"
-    - "find emails with attachments"
-    - "search for emails after July 1st"
-
-    Gmail search syntax examples:
     - invoice
+    - AI
     - from:amazon
+    - from:linkedin
+    - from:github
+    - from:udemy
     - subject:meeting
-    - after:2026/07/01
     - has:attachment
-    
-    Note: Returns max 5 emails by default to conserve tokens.
-    Each email includes: subject, from, date, snippet, and attachment info.
-    Full email bodies are truncated to 200 characters.
+    - is:unread
+    - is:starred
+    - newer_than:7d
+    - newer_than:1d
+    - after:2026/07/01
+    - before:2026/07/31
+
+    Args:
+        query (str):
+            Gmail search query.
+
+        limit (int):
+            Maximum number of emails to return.
+            Must be an INTEGER, never a string.
+            Default: 5
+            Maximum: 5
+
+    Returns:
+        A concise list of matching emails containing:
+        - Subject
+        - Sender
+        - Date
+        - Snippet
+        - Read/Unread status
+        - Attachment information
+
+    Notes:
+    - Always use an INTEGER for `limit` (e.g. 5, not "5").
+    - Return at most 5 emails to reduce token usage.
+    - Email bodies are truncated to keep responses efficient.
+    - If no emails match, return an empty result instead of generating an answer.
     """
+
+    # Handle string input from LLM (LLMs sometimes pass numbers as strings in JSON)
+    if isinstance(limit, str):
+        limit = int(limit)
 
     # Limit to 5 emails by default to avoid token limits
     results = gmail_search_service.search_emails(
@@ -73,12 +129,12 @@ def search_emails(query: str, limit: int = 5):
     if isinstance(results, list):
         summaries = [format_email_summary(email) for email in results]
         return {
-            "count": len(summaries),
+            "count": len(summaries),    
             "emails": summaries,
             "note": "Email bodies truncated to 200 chars. Use read_emails for full content if needed."
         }
-    
-    return results
 
+
+    return results
 
 search_emails_tool = search_emails

@@ -1,5 +1,6 @@
 
 
+from typing import Union
 from langchain.tools import tool
 import base64
 
@@ -43,7 +44,7 @@ def extract_attachments(payload):
     return attachments
 
 
-def read_emails(limit: int = 1):
+def read_emails(limit: Union[str, int] = 1):
     """
     Read emails from the user's Gmail inbox and return concise summaries.
 
