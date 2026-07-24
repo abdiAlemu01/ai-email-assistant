@@ -34,9 +34,10 @@ async def run_agent(request: AgentRequest):
             logger.info(f"Stream event: {event}")
             
             # Handle different event types from LangGraph streaming
+            # Events have keys like "model", "tools", each containing a "messages" list
             for key, value in event.items():
-                if key == "messages":
-                    for msg in value:
+                if isinstance(value, dict) and "messages" in value:
+                    for msg in value["messages"]:
                         if hasattr(msg, 'type') and hasattr(msg, 'content'):
                             serialized_messages.append({
                                 "type": msg.type,
