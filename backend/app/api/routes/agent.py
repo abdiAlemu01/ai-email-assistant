@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 class AgentRequest(BaseModel):
     query: str
+    thread_id: str = "default"  # Optional thread_id for conversation memory
 
 
 @router.post("/run")
@@ -22,35 +23,36 @@ async def run_agent(request: AgentRequest):
         logger.info(f"Received agent query: {request.query}")
         agent = create_email_agent(model)
         
-        logger.info("Invoking agent...")
-        response = agent.invoke({"messages": [("human", request.query)]})
+        # Configuration for memory/checkpointer - thread_id identifies the conversation
+        config = {"configurable": {"thread_id": request.thread_id}}
         
-        logger.info(f"Agent response type: {type(response)}")
-        logger.info(f"Agent response keys: {response.keys() if isinstance(response, dict) else 'Not a dict'}")
+        logger.info("Streaming agent response...")
         
-        if "messages" not in response:
-            logger.error(f"Response missing 'messages' key. Response: {response}")
-            raise HTTPException(status_code=500, detail="Agent response missing 'messages' field")
-        
-        # Convert LangChain message objects to serializable format
+        # Stream the agent response and collect messages
         serialized_messages = []
-        for msg in response["messages"]:
-            if hasattr(msg, 'type') and hasattr(msg, 'content'):
-                serialized_messages.append({
-                    "type": msg.type,
-                    "content": msg.content
-                })
-            elif isinstance(msg, tuple):
-                serialized_messages.append({
-                    "type": msg[0],
-                    "content": msg[1]
-                })
-            else:
-                logger.warning(f"Unknown message format: {type(msg)}")
-                serialized_messages.append({
-                    "type": "unknown",
-                    "content": str(msg)
-                })
+        for event in agent.stream({"messages": [("human", request.query)]}, config):
+            logger.info(f"Stream event: {event}")
+            
+            # Handle different event types from LangGraph streaming
+            for key, value in event.items():
+                if key == "messages":
+                    for msg in value:
+                        if hasattr(msg, 'type') and hasattr(msg, 'content'):
+                            serialized_messages.append({
+                                "type": msg.type,
+                                "content": msg.content
+                            })
+                        elif isinstance(msg, tuple):
+                            serialized_messages.append({
+                                "type": msg[0],
+                                "content": msg[1]
+                            })
+                        else:
+                            logger.warning(f"Unknown message format: {type(msg)}")
+                            serialized_messages.append({
+                                "type": "unknown",
+                                "content": str(msg)
+                            })
         
         return {"messages": serialized_messages}
         

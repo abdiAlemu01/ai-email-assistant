@@ -4,7 +4,7 @@
 from fastapi import APIRouter, HTTPException
 import logging
 
-from ...tools.gmail_reader import read_latest_emails
+from ...tools.gmail_reader import read_emails
 
 router = APIRouter(prefix="/email", tags=["email"])
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ async def list_emails(limit: int = 5):
     """Return latest emails using the gmail reader tool."""
     try:
         logger.info(f"Fetching {limit} emails...")
-        result = read_latest_emails(limit)
+        result = read_emails(limit)
         
         # Handle both old format (array) and new format (dict with emails key)
         if isinstance(result, dict) and "emails" in result:

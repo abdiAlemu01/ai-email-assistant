@@ -203,6 +203,52 @@ class HumanReviewService:
         
         return reviews
     
+    def edit_review(
+        self,
+        review_id: str,
+        to: Optional[str] = None,
+        subject: Optional[str] = None,
+        body: Optional[str] = None
+    ) -> bool:
+        """
+        Edit a pending review request's email data.
+        
+        Only pending reviews can be edited. Once approved or rejected,
+        the email cannot be modified.
+        
+        Args:
+            review_id: Review request ID
+            to: New recipient email (optional)
+            subject: New email subject (optional)
+            body: New email body (optional)
+            
+        Returns:
+            True if edited, False if review not found or not pending
+        """
+        review = self.pending_reviews.get(review_id)
+        if not review:
+            return False
+        
+        # Only allow editing pending reviews
+        if review["status"] != "pending":
+            return False
+        
+        # Update provided fields
+        if to is not None:
+            review["email_data"]["to"] = to
+        if subject is not None:
+            review["email_data"]["subject"] = subject
+        if body is not None:
+            review["email_data"]["body"] = body
+        
+        # Update edited timestamp
+        review["edited_at"] = datetime.now().isoformat()
+        
+        if self.persist_to_file:
+            self._save_to_file()
+        
+        return True
+    
     def delete_review(self, review_id: str) -> bool:
         """
         Delete a review request.

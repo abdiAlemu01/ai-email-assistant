@@ -75,7 +75,7 @@ def search_emails(query: str, limit: int = 5):
         return {
             "count": len(summaries),
             "emails": summaries,
-            "note": "Email bodies truncated to 200 chars. Use read_latest_emails for full content if needed."
+            "note": "Email bodies truncated to 200 chars. Use read_emails for full content if needed."
         }
     
     return results

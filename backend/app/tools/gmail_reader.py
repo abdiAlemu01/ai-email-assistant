@@ -43,19 +43,67 @@ def extract_attachments(payload):
     return attachments
 
 
-def read_latest_emails(limit: int = 1):
+def read_emails(limit: int = 1):
     """
-    Retrieve recent emails from the user's Gmail inbox.
-    Returns CONCISE summaries to avoid token limits.
+    Read emails from the user's Gmail inbox and return concise summaries.
 
-    Use this tool when the user asks:
-    - Read my latest emails
-    - Show recent emails
-    - What emails did I receive?
+    Use this tool whenever the user wants to read, view, check, or inspect emails.
 
-    Returns email data with truncated bodies and key information only.
-    Max limit: 1 emails to conserve tokens.
+    Typical user requests include:
+    - Read my emails
+    - Read my latest email
+    - Read my newest email
+    - Show my recent emails
+    - Show the first email
+    - Show the first 2 emails
+    - Show the first 5 emails
+    - Read my last 3 emails
+    - What emails did I receive today?
+    - Show emails from LinkedIn
+    - Read emails from Udemy
+    - Show emails from GitHub
+    - Read emails from Google
+    - Show emails from Amazon
+    - Read emails from Abdi
+    - Show emails from a specific sender
+    - Check my inbox
+    - What new emails do I have?
+
+    The tool can retrieve:
+    - The latest N emails (up to 5)
+    - Emails from a specific sender or organization
+    - Concise email summaries including:
+        - Sender
+        - Subject
+        - Date
+        - Read/Unread status
+        - Snippet
+        - Truncated email body
+        - Attachment names (if any)
+
+    Args:
+        limit (int):
+            Number of emails to retrieve.
+            Default: 1
+            Maximum: 5
+
+        sender (str | None):
+            Optional sender name or email address used to filter emails.
+            Examples:
+            "LinkedIn"
+            "Udemy"
+            "GitHub"
+            "Google"
+            "Amazon"
+            "abdi@example.com"
+
+    Returns:
+        A list of concise email summaries optimized for AI processing while minimizing token usage.
     """
+
+    # Handle string input from LLM
+    if isinstance(limit, str):
+        limit = int(limit)
 
     service = gmail_reader_service.get_gmail_service()
 
@@ -116,4 +164,13 @@ def read_latest_emails(limit: int = 1):
     }
 
 
-read_latest_emails_tool = tool(read_latest_emails)
+read_emails_tool = tool(read_emails)
+
+
+
+
+
+
+
+# add system prompt for my AI Agent, add memory for the effecience,add stream make response smooth
+# add middlewares
