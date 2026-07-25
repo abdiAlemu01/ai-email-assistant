@@ -10,6 +10,9 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
     ? 'https://ai-email-assistant-re4w.onrender.com/api' 
     : '/api');
 
+// Debug: Log the API base URL
+console.log('API_BASE_URL:', API_BASE_URL);
+
 export interface ApiError {
   message: string;
   detail?: string;
