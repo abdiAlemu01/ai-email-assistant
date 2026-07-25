@@ -1,21 +1,25 @@
 
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
-load_dotenv()
+# Explicitly load .env from backend directory
+backend_dir = Path(__file__).parent.parent.parent
+env_path = backend_dir / ".env"
+load_dotenv(dotenv_path=env_path)
 
-api_key = os.getenv("ANTHROPIC_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError(
-        "ANTHROPIC_API_KEY not found in environment variables. "
-        "Please set it in your .env file or export it as an environment variable."
+        "GEMINI_API_KEY not found in environment variables. "
+        f"Please set it in your .env file at {env_path}"
     )
 
-from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-# Initialize Anthropic Claude model
-model = ChatAnthropic(
-    model="claude-3-5-sonnet-20241022",
+# Initialize Google Gemini model
+model = ChatGoogleGenerativeAI(
+    model="gemini-1.5-pro",
     api_key=api_key,
     temperature=0
 )
