@@ -1,7 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import { EmailResponse, AgentResponse } from '../types/api';
 
-const API_BASE_URL = '/api';
+// Use production backend URL in production, local proxy in development
+// Vite requires environment variables to start with VITE_ prefix
+const API_BASE_URL = import.meta.env.PROD 
+  ? (import.meta.env.VITE_API_URL || 'https://ai-email-assistant-re4w.onrender.com/api')
+  : '/api';
 
 export interface ApiError {
   message: string;
@@ -16,9 +20,12 @@ export const parseError = (error: unknown): ApiError => {
     
     // Network error (no response from server)
     if (!axiosError.response) {
+      const backendUrl = import.meta.env.PROD 
+        ? 'https://ai-email-assistant-re4w.onrender.com'
+        : 'http://localhost:8000';
       return {
         message: 'Unable to connect to the server',
-        detail: 'Please check if the backend server is running on http://localhost:8000',
+        detail: `Please check if the backend server is running on ${backendUrl}`,
         status: 0,
         source: 'network'
       };
