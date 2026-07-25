@@ -14,7 +14,8 @@ export const useAgentQuery = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (query: string) => emailApi.runAgent(query),
+    mutationFn: ({ query, threadId }: { query: string; threadId: string }) => 
+      emailApi.runAgent(query, threadId),
     onSuccess: () => {
       // Invalidate emails query after agent runs
       queryClient.invalidateQueries({ queryKey: ['emails'] });

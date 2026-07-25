@@ -76,9 +76,20 @@ export const emailApi = {
   },
 
   // Run agent with natural language query
-  runAgent: async (query: string): Promise<AgentResponse> => {
+  runAgent: async (query: string, threadId: string = 'default'): Promise<AgentResponse> => {
     const response = await axios.post(`${API_BASE_URL}/agent/run`, {
-      query
+      query,
+      thread_id: threadId
+    });
+    return response.data;
+  },
+
+  // Send email
+  sendEmail: async (to: string, subject: string, body: string): Promise<{ message: string }> => {
+    const response = await axios.post(`${API_BASE_URL}/email/send`, {
+      to,
+      subject,
+      body
     });
     return response.data;
   }

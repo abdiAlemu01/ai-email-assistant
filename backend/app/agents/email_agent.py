@@ -1,44 +1,26 @@
 
 from dotenv import load_dotenv
 import os
-from pathlib import Path
 
-# Load .env file from the backend directory explicitly
-backend_dir = Path(__file__).parent.parent.parent
-env_path = backend_dir / ".env"
-print(f"DEBUG: Looking for .env at: {env_path}")
-print(f"DEBUG: .env exists: {env_path.exists()}")
+load_dotenv()
 
-load_dotenv(dotenv_path=env_path)
-
-# Debug: Check if .env file is being loaded
-api_key = os.getenv("ANTHROPIC_API_KEY")
-print(f"DEBUG: ANTHROPIC_API_KEY found: {api_key is not None}")
-
-# Try fallback to old variable name
-if not api_key:
-    api_key = os.getenv("CLOUDE_API_KEY")
-    print(f"DEBUG: CLOUDE_API_KEY found: {api_key is not None}")
-
-print(f"DEBUG: API key length: {len(api_key) if api_key else 0}")
-print(f"DEBUG: Current working directory: {os.getcwd()}")
-
+api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
     raise ValueError(
-        "ANTHROPIC_API_KEY (or CLOUDE_API_KEY) not found in environment variables. "
+        "GROQ_API_KEY not found in environment variables. "
         "Please set it in your .env file or export it as an environment variable."
     )
 
-from langchain_anthropic import ChatAnthropic
+from langchain_groq import ChatGroq
 
-# Initialize Claude model
-model = ChatAnthropic(
-    model="claude-3-5-sonnet-20241022",
+# Initialize Groq model
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",
     api_key=api_key,
     temperature=0
 )
 
-
+from langchain.agents.middleware import HumanInTheLoopMiddleware
 from langchain.tools import tool
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import InMemorySaver
@@ -48,6 +30,9 @@ from ..tools.gmail_search import search_emails_tool
 from ..tools.gmail_summarize import summarize_email_tool
 from ..tools.gmail_draft_replies import draft_replies_email_tool
 from ..tools.gmail_send import send_email_tool, send_draft_tool
+
+# Create a shared checkpointer instance for memory persistence across requests
+checkpointer = InMemorySaver()
 
 
 def create_email_agent(model):
@@ -64,7 +49,7 @@ def create_email_agent(model):
     agent = create_agent(
         model=model,
         tools=tools,
-        checkpointer=InMemorySaver(),
+        checkpointer=checkpointer,
         system_prompt="""You are an AI Email Assistant whose primary responsibility is to help users manage their Gmail safely, accurately, and efficiently,
 
 Your responsibilities include:
