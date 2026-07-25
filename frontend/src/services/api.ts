@@ -1,11 +1,14 @@
 import axios, { AxiosError } from 'axios';
 import { EmailResponse, AgentResponse } from '../types/api';
 
-// Use production backend URL in production, local proxy in development
+// Use VITE_API_URL if set (for local development with remote backend or production)
+// Otherwise use local proxy for development
 // Vite requires environment variables to start with VITE_ prefix
-const API_BASE_URL = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_URL || 'https://ai-email-assistant-re4w.onrender.com/api')
-  : '/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL
+  : (import.meta.env.PROD 
+    ? 'https://ai-email-assistant-re4w.onrender.com/api' 
+    : '/api');
 
 export interface ApiError {
   message: string;
