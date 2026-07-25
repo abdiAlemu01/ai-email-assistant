@@ -4,22 +4,37 @@ import os
 from pathlib import Path
 
 # Explicitly load .env from backend directory
-backend_dir = Path(__file__).parent.parent.parent
+# File is at: backend/app/agents/email_agent.py
+# .env is at: backend/.env
+backend_dir = Path(__file__).parent.parent.parent  # Goes up 3 levels: agents/ -> app/ -> backend/
 env_path = backend_dir / ".env"
-load_dotenv(dotenv_path=env_path)
 
-api_key = os.getenv("GEMINI_API_KEY")
+# Debug: Print the resolved path to verify
+print(f"Loading .env from: {env_path.absolute()}")
+print(f".env file exists: {env_path.exists()}")
+
+# Try loading from the calculated path
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+    print("Successfully loaded .env from calculated path")
+else:
+    # Fallback: try current working directory
+    print("Calculated path doesn't exist, trying current working directory")
+    load_dotenv()
+    print("Loaded .env from current working directory")
+
+api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
     raise ValueError(
-        "GEMINI_API_KEY not found in environment variables. "
-        f"Please set it in your .env file at {env_path}"
+        "GROQ_API_KEY not found in environment variables. "
+        f"Please set it in your .env file at {env_path.absolute()}"
     )
 
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 
-# Initialize Google Gemini model
-model = ChatGoogleGenerativeAI(
-    model="gemini-1.5-pro",
+# Initialize Groq model
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",
     api_key=api_key,
     temperature=0
 )
