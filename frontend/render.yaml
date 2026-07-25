@@ -6,4 +6,4 @@ services:
     publishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: https://ai-email-assistant-re4w.onrender.com
+        value: https://ai-email-assistant-re4w.onrender.com/api
