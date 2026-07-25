@@ -4,18 +4,18 @@ import os
 
 load_dotenv()
 
-api_key = os.getenv("GROQ_API_KEY")
+api_key = os.getenv("ANTHROPIC_API_KEY")
 if not api_key:
     raise ValueError(
-        "GROQ_API_KEY not found in environment variables. "
+        "ANTHROPIC_API_KEY not found in environment variables. "
         "Please set it in your .env file or export it as an environment variable."
     )
 
-from langchain_groq import ChatGroq
+from langchain_anthropic import ChatAnthropic
 
-# Initialize Groq model
-model = ChatGroq(
-    model="llama-3.3-70b-versatile",
+# Initialize Anthropic Claude model
+model = ChatAnthropic(
+    model="claude-3-5-sonnet-20241022",
     api_key=api_key,
     temperature=0
 )

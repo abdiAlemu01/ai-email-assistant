@@ -240,9 +240,9 @@ export const EmailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#343541] flex flex-col">
+    <div className="h-screen bg-[#343541] flex flex-col">
       {/* Header */}
-      <div className="bg-[#202123] border-b border-gray-700 px-4 py-3">
+      <div className="bg-[#202123] border-b border-gray-700 px-4 py-3 flex-shrink-0">
         <div className="container mx-auto flex items-center justify-center gap-3">
           <Mail className="w-6 h-6 text-emerald-400" />
           <h1 className="text-xl font-bold text-white">AI Email Assistant</h1>
@@ -450,7 +450,7 @@ export const EmailPage = () => {
       )}
 
       {/* Query Input */}
-      <div className="bg-[#40414f] border-t border-gray-700 px-4 py-4">
+      <div className="bg-[#40414f] border-t border-gray-700 px-4 py-4 flex-shrink-0">
         <div className="container mx-auto max-w-3xl">
           <QueryInput 
             onQuery={handleQuery} 
